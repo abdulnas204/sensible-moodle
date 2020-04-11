@@ -57,11 +57,6 @@ require_login($course, false, $cm);
 $context = context_module::instance($cm->id);
 require_capability('mod/quiz:view', $context);
 
-// Cache some other capabilities we use several times.
-$canattempt = has_capability('mod/quiz:attempt', $context);
-$canreviewmine = has_capability('mod/quiz:reviewmyattempts', $context);
-$canpreview = has_capability('mod/quiz:preview', $context);
-
 // Create an object to manage all the other (non-roles) access rules.
 $timenow = time();
 $quizobj = quiz::create($cm->instance, $USER->id);
@@ -71,6 +66,11 @@ $quiz = $quizobj->get_quiz();
 
 // Trigger course_module_viewed event and completion.
 quiz_view($quiz, $course, $cm, $context);
+
+// Cache some other capabilities we use several times.
+$canattempt = has_capability('mod/quiz:attempt', $context);
+$canreviewmine = has_capability('mod/quiz:reviewmyattempts', $context);
+$canpreview = has_capability('mod/quiz:preview', $context);
 
 // Initialize $PAGE, compute blocks.
 $PAGE->set_url('/mod/quiz/view.php', array('id' => $cm->id));
